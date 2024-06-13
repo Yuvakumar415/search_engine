@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Capstone Project</title>
+  
+</head>
+<body>
+  <h1>Capstone Project </h1>
+  <form id="taskForm">
+    <input type="text" id="taskInput" placeholder="Enter a task">
+    <button type="submit">Add Task</button>
+  </form>
+  <ul id="taskList"></ul>
+
+ 
+</body>
+</html>
+<style>
+        body {
+    text-align: center;
+    }
+
+    h1 {
+    color: #333;
+    }
+
+    form {
+    margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+    padding: 10px;
+    width: 300px;
+    }
+
+    button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+    background-color: #45a049;
+    }
+
+    .task {
+    margin-bottom: 10px;
+    list-style-type: none;
+    }
+
+    .task button {
+    padding: 5px 10px;
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    }
+
+    .task button:hover {
+    background-color: #da190b;
+    }
+</style>
+<script>
+    document.getElementById('taskForm').addEventListener('submit', addTask);
+
+
+    window.addEventListener('load', function () {
+    var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    tasks.forEach(function (task) {
+        addTaskToList(task);
+    });
+    });
+
+    function addTask(event) {
+    event.preventDefault();
+
+    var taskInput = document.getElementById('taskInput');
+    var taskValue = taskInput.value;
+
+    if (taskValue !== '') {
+        addTaskToList(taskValue);
+        saveTaskToLocalStorage(taskValue);
+        taskInput.value = '';
+    }
+    }
+
+    function addTaskToList(taskValue) {
+    var taskList = document.getElementById('taskList');
+    var taskItem = document.createElement('li');
+
+    taskItem.classList.add('task');
+    taskItem.innerHTML = taskValue + ' <button onclick="deleteTask(this)">Delete</button>';
+
+    taskList.appendChild(taskItem);
+    }
+
+    function saveTaskToLocalStorage(taskValue) {
+    var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    tasks.push(taskValue);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function deleteTask(button) {
+    var taskItem = button.parentNode;
+    var taskValue = taskItem.firstChild.textContent.trim();
+
+    var tasks = JSON.parse(localStorage.getItem('tasks'));
+    tasks.splice(tasks.indexOf(taskValue), 1);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+
+    taskItem.parentNode.removeChild(taskItem);
+    }
+</script>
